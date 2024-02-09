@@ -1,0 +1,47 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<div class="col-12 nb-5">
+    <a class="btn btn-outline-primary" href="{% url 'main:create_mailing' %}">Создать рассылку</a>
+</div>
+{% for object in object_list %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="my-0 font-weight-normal">{{ object.name }}</h3>
+    </div>
+    <div class="card-body">
+        <p>{{ object.state }}<p>
+        <p>{{ object.periodicity }}<p>
+        <p>{{ object.client }}</p>
+        <p>{{ object.owner }}</p>
+        <p>{{ object.start_date }}</p>
+        <p>{{ object.end_date }}</p>
+        <a href="{% url 'main:mailing_edit' object.pk %}" class="btn btn-sm btn-outline-secondary">Редактирование</a>
+        <a href="{% url 'main:mailing_delete' object.pk %}" class="btn btn-sm btn-outline-secondary">Удалить</a>
+    </div>
+
+    {% endfor %}
+    {% endblock %}
+    <!--<div class="card">-->
+    <!--                <div class="card-header">-->
+    <!--                    <h3 class="my-0 font-weight-normal">{{ object.topic }}</h3>-->
+    <!--                </div>-->
+    <!--                <div class="card-body">-->
+    <!--                    <p>{{ object.subject }}</p>-->
+    <!--                    <a href="{% url 'main:message_view' object.pk %}" class="btn btn-sm btn-outline-secondary" >Просмотр &raquo;</a>-->
+    <!--                    <a href="{% url 'main:message_edit' object.pk %}" class="btn btn-sm btn-outline-secondary" >Редактирование</a>-->
+    <!--                    <a href="{% url 'main:message_delete' object.pk %}" class="btn btn-sm btn-outline-secondary" >Удалить</a>-->
+    <!--                </div>-->
+    <!--    -->
+    <!--    -->
+    <!--    -->
+    <!--    -->
+    <!--    -->
+    <!--    -->
+    <!--    -->
+    <!--    <div class="col-lg-4">-->
+    <!--        <h2 class="fw-normal">{{ object.name }}</h2>-->
+    <!--        <p>{{ object.state }}<p>-->
+    <!--          <p>{{ object.periodicity }}<p>-->
+    <!--          <p>{{ object.time_mailing }}</p>-->
+    <!--        <p><a class="btn btn-secondary" href="{% url 'main:mailing_view' object.pk %}">View &raquo;</a></p>-->
+    <!--      </div>-->
