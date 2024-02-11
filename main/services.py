@@ -3,7 +3,7 @@ import pytz
 from django.core.cache import cache
 from django.conf import settings
 from main.models import Mailing, Logs
-from users.services import send_sms, send_mail_user
+from users.services import send_mail_user
 
 
 def my_job():
@@ -17,10 +17,10 @@ def my_job():
     mailings = mailings.filter(next_date__lte=today)
 
     for mailing in mailings:
-        if mailing.status != 'Завершена':
-            mailing.status = 'Запущена'
+        if mailing.state != 'Завершена':
+            mailing.state = 'Запущена'
             mailing.save()
-            emails_list = [client.email for client in mailing.mail_to.all()]
+            emails_list = [client.email for client in mailing.client.all()]
 
             result = send_mail_user(
                 subject=mailing.message.subject,
@@ -28,16 +28,16 @@ def my_job():
                 email_list=emails_list,
             )
 
-            status = result == 1
+            state = result == 1
 
-            log = Logs(mailing=mailing, status=status)
+            log = Logs(mailing=mailing, state=state)
             log.save()
 
-            if status:
+            if state:
                 if mailing.next_date < mailing.end_date:
-                    mailing.status = 'Создана'
+                    mailing.state = 'Создана'
                 else:
-                    mailing.status = 'Завершена'
+                    mailing.state = 'Завершена'
 
             if mailing.periodicity == 'Раз в день':
                 mailing.next_date = log.last_mailing_time + day

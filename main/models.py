@@ -38,12 +38,12 @@ class Client(models.Model):
 
 class Message(models.Model):
 
-    subject = models.CharField(max_length=40, verbose_name='Тема письма')
-    body = models.TextField(verbose_name='Содержание', **NULLABLE)
+    subject = models.CharField(max_length=250, verbose_name='Тема письма')
+    body = models.TextField(verbose_name='Содержание')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Владелец сообщения')
 
     def __str__(self):
-        return f'{self.subject}'
+        return self.subject
 
     class Meta:
         verbose_name = 'письмо'
@@ -61,7 +61,7 @@ class Mailing(models.Model):
     name = models.CharField(max_length=50, verbose_name='Рассылка', **NULLABLE)
     periodicity = models.CharField(choices=period_mailing, default='Один раз в день', verbose_name='Периодичность')
     state = models.CharField(max_length=20, choices=stat_mailing, default='Запущена', verbose_name='Статус')
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='клиент', **NULLABLE)
+    client = models.ManyToManyField(Client, verbose_name='клиент')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Владелец рассылки')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Сообщение', **NULLABLE)
     start_date = models.DateTimeField(default=timezone.now, verbose_name='Начало рассылки')
